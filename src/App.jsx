@@ -8,17 +8,22 @@ function App() {
   function WeatherCard({ weather }) {
   return (
     <>
-    <h2 className="card-title text-xl">{weather.name}</h2>
-    <p className="text-4xl font-bold">{Math.round(weather.main.temp)}°C</p>
-    <div className="flex items-center gap-2">
+
+    <div className="flex gap-5">
       <img
         src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
         alt={weather.weather[0].description}
-        className="w-16 h-16"
+        className="w-32 h-32"
       />
-      <span className="capitalize">{weather.weather[0].description}</span>
+      <div className="flex-col justify-center">
+        <h2 className="text-2xl">{weather.name}</h2>
+        <p className="text-4xl font-bold">{Math.round(weather.main.temp)}°C</p>
+      </div>
     </div>
-    <div className="text-sm mt-2 opacity-70">
+
+
+    <span className="capitalize">{weather.weather[0].description}</span>
+    <div className="text-md mt-2 opacity-70">
       Humidity: {weather.main.humidity}% • Wind: {weather.wind.speed} m/s
     </div>
     </>
@@ -31,33 +36,34 @@ function App() {
 
   function getData() {
     const apiKey = "16459259815a0e8e9dc07e9595619fb3";
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${searchQuery}&appid=${apiKey}`
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${searchQuery}&appid=${apiKey}&units=metric`
 
     fetch(url)
       .then(resp => resp.json())
       .then((data) => {
         setData(data);
       });
-
-    setSearchQuery("");
   }
 
   return (
     <>
-    <div className="search-container bg-base-100 shadow-xl">
-      <div className="mt-3 d-flex">
+    <div className="search-container bg-base-100 shadow-xl mb-3">
+      <h1 className="font-mono text-secondary text-shadow-lg pt-3">Weather App</h1>
+      <div className="pt-3 flex gap-3 justify-center  ">
         <input type="text"
           value={searchQuery}
           placeholder='Search a place'
           className='input input-md'
           onChange={onChangeQuery}
           />
-        <button className="btn btn-primary" onClick={getData}>Large</button>
+        <button className="btn btn-secondary" onClick={getData}>Search</button>
       </div>
       <div className="card-body items-center">
-      { data && < WeatherCard weather={data} />}
-        </div>
+        { data &&
+        < WeatherCard weather={data} />
+        }
       </div>
+    </div>
     </>
   )
 }
